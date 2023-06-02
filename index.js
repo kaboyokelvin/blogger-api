@@ -1,4 +1,5 @@
 require('@babel/register');
+require('dotenv').config()
 
 const app =require('./src/app');
 
