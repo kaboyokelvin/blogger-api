@@ -1,7 +1,7 @@
 require('@babel/register');
 
-import app from "./src/app";
+const app =require('./src/app');
 
-app.listen(process.env.PORT || 4000, () => {
-    console.log('App is listening on port: ', process.env.PORT)
+app.listen(4000, () => {
+    console.log('App is listening on port 4000');
 })
