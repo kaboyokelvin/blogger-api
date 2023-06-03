@@ -1,7 +1,8 @@
 require('@babel/register');
+require('dotenv').config()
 
-import app from "./src/app";
+const app =require('./src/app');
 
-app.listen(process.env.PORT || 4000, () => {
-    console.log('App is listening on port: ', process.env.PORT)
+app.listen(1200, () => {
+    console.log('App is listening on port 1200');
 })
