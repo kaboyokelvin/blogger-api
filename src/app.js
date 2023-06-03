@@ -1,8 +1,9 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const user = require('./models/users')
-const bcrypt = require('bcrypt')
-const validator = require('validator')
+const express = require('express');
+const mongoose = require('mongoose');
+const user = require('./models/users');
+const bcrypt = require('bcrypt');
+const validator = require('validator');
+const jwt = require('jsonwebtoken');
 
 const app = express()
 
@@ -41,6 +42,33 @@ app.post('/signup', async (req, res, next) => {
   }
 })
 
+app.post('/signin', async (req, res, next) => {
+    const userEmail = req.body.email;
+    const password = req.body.password;
+    if (validator.isEmail(userEmail)) {
+        const checkEmail = await user.findOne({ email: userEmail })
+        if (checkEmail) {
+            const match = await bcrypt.compare(password, checkEmail.password);
+            if (match) {
+                const token = jwt.sign({userEmail,password},process.env.SECRET);
+                res.json(token);
+                res.json("successfully logged in");
+            }
+            else {
+                res.json({ message: "incorrect password entered" });
+            }
+
+        }
+        else {
+            res.json({ message: "Email does not exist" });
+        }
+
+
+    }
+    else {
+        res.json({ message: "invalid email format" });
+    }
+})
 app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Something broke!', error: err.message })
 })
