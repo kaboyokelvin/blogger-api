@@ -5,13 +5,15 @@ const bcrypt = require('bcrypt');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
 
+require('dotenv').config()
+
 const app = express()
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
-
+console.log(process.env.NODE_ENV , 'Environment')
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.NODE_ENV === 'development' ? process.env.MONGO_URI : process.env.MONGO_URI_TEST)
   .catch(error => console.log(error.message))
 
 app.post('/signup', async (req, res, next) => {
@@ -22,7 +24,7 @@ app.post('/signup', async (req, res, next) => {
       if (validator.isEmail(userEmail)) {
         const checkEmail = await user.findOne({ email: userEmail })
         if (checkEmail) {
-          res.json({ message: 'Email already in use' })
+          res.status(400).json({ message: 'Email already in use' })
         } else {
           const hashedPassword = await bcrypt.hash(password, 10)
           await user.create({ email: userEmail, password: hashedPassword })
