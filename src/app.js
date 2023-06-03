@@ -51,8 +51,10 @@ app.post('/signin', async (req, res, next) => {
             const match = await bcrypt.compare(password, checkEmail.password);
             if (match) {
                 const token = jwt.sign({userEmail,password},process.env.SECRET);
-                res.json(token);
-                res.json("successfully logged in");
+                res.status(200).json({
+                    token,
+                    message: "successfully logged in"
+                })
             }
             else {
                 res.json({ message: "incorrect password entered" });
@@ -69,6 +71,7 @@ app.post('/signin', async (req, res, next) => {
         res.json({ message: "invalid email format" });
     }
 })
+
 app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Something broke!', error: err.message })
 })
