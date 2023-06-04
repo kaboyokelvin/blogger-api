@@ -5,7 +5,7 @@ require('dotenv').config()
 
 describe('Test Authentication', () => {
   afterAll(async () => {
-    process.env.NODE_ENV === 'test' ? await userModel.deleteMany({}) : {}
+    if (process.env.NODE_ENV === 'test') { await userModel.deleteMany({}) }
   })
 
   jest.setTimeout(50000)
