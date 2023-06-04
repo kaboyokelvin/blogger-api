@@ -33,7 +33,7 @@ mongoose
   .connect(process.env.MONGO_URI)
   .catch(error => console.log(error.message))
 
-app.post('/signup', async (req, res, next) => {
+app.post('/sign-up', async (req, res, next) => {
   try {
     const userEmail = req.body.email
     const password = req.body.password
@@ -61,7 +61,7 @@ app.post('/signup', async (req, res, next) => {
   }
 })
 
-app.post('/signin', async (req, res, next) => {
+app.post('/sign-in', async (req, res, next) => {
   try {
     const userEmail = req.body.email
     const password = req.body.password
