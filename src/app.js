@@ -21,7 +21,7 @@ mongoose
   .then(() => { console.log('DB connected') })
   .catch(error => console.log(error.message))
 
-app.use(authRouter)
+app.use('/users/auth', authRouter)
 
 app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Something broke!', error: err.message })
