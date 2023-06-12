@@ -164,6 +164,11 @@ app.post('/reset-password/:token', (req, res, next) => validateBody(req, res, ne
   } catch (error) { next(error) }
 })
 
+// blog creations routes
+app.post('/create-blog/userid', verifyToken, (req, res) => {
+  const { Tags, title, content, } = req.body
+})
+
 app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Something broke!', error: err.message })
 })
