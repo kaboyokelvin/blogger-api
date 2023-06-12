@@ -29,6 +29,23 @@ function verifyToken (req, res, next) {
   })
 }
 
+async function verifyToken (req, res, next) {
+  const authHeader = req.headers.authorization
+  if (authHeader !== 'undefined') {
+    const token = authHeader.split(' ')[1]
+    const decode = jwt.verify(token, process.env.SECRET)
+    if (decode) {
+      next()
+    } else {
+      (
+        res.status(400).json({ message: 'token authentication failed' })
+      )
+    }
+  } else {
+    res.status(401).json({ message: 'token not found' })
+  }
+}
+
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
