@@ -1,5 +1,5 @@
 const express = require('express')
-const user = require('../../models/users')
+const { user } = require('../../models')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
 const crypto = require('crypto')
@@ -10,8 +10,6 @@ const { validateBody } = require('../../middleware/validation/apiValidation')
 const jwt = require('jsonwebtoken')
 
 const authRouter = express.Router()
-
-// eslint-disable-next-line no-unused-vars
 
 authRouter.post('/sign-up', async (req, res, next) => {
   try {
@@ -50,7 +48,8 @@ authRouter.post('/sign-in', async (req, res, next) => {
       if (checkEmail) {
         const match = await bcrypt.compare(password, checkEmail.password)
         if (match) {
-          const token = jwt.sign({ userEmail, password }, process.env.SECRET)
+          console.log(checkEmail._id, 'checkEmail._id')
+          const token = jwt.sign({ _id: checkEmail._id }, process.env.SECRET)
           res.status(200).json({
             token,
             message: 'successfully logged in'
