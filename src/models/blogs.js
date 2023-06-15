@@ -1,15 +1,15 @@
 const mongoose = require('mongoose')
 
 const blogSchema = mongoose.Schema({
-  userId: String,
-  Tags: [String],
+  userId: mongoose.Types.ObjectId,
+  tags: [String],
   title: String,
   content: String,
   draft: Boolean,
-  Featured: Boolean,
-  comments: [String],
-  createdAt: Date,
-  updatedAt: Date
+  Featured: { type: Boolean, default: false }
+  // comments: [String]
+}, {
+  timestamps: true
 })
 
 const blogModel = mongoose.model('blog', blogSchema)
