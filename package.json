@@ -6,7 +6,9 @@
   "scripts": {
     "test": "jest",
     "dev": "nodemon index.js",
-    "lint": "eslint --fix ./*.js"
+    "lint": "eslint --fix ./*.js",
+    "build": "npx babel src -d dist --presets=@babel/preset-env",
+    "start": "node dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -20,8 +22,9 @@
   },
   "homepage": "https://github.com/kaboyokelvin/blogger-api#readme",
   "devDependencies": {
-    "@babel/core": "^7.22.1",
-    "@babel/preset-env": "^7.22.4",
+    "@babel/cli": "^7.22.5",
+    "@babel/core": "^7.22.5",
+    "@babel/preset-env": "^7.22.5",
     "@babel/register": "^7.21.0",
     "eslint": "^8.42.0",
     "eslint-config-standard": "^17.1.0",
