@@ -73,44 +73,46 @@ authRouter.post('/sign-in', async (req, res, next) => {
 authRouter.post('/forgot-password', async (req, res, next) => {
   try {
     const email = req.body.email
-    const token = crypto.randomBytes(20).toString('hex')
+    if (await user.findOne({ email })) {
+      const token = crypto.randomBytes(20).toString('hex')
 
-    await user.findOneAndUpdate(
-      { email },
-      {
-        resetPasswordToken: token,
-        resetPasswordExpires: Date.now() + 60000
-      }
-    )
+      await user.findOneAndUpdate(
+        { email },
+        {
+          resetPasswordToken: token,
+          resetPasswordExpires: Date.now() + 60000
+        }
+      )
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.MAIL_ADDRESS,
-        pass: process.env.MAIL_PASSWORD
-      },
-      tls: {
-        rejectUnauthorized: false
-      }
-    })
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.MAIL_ADDRESS,
+          pass: process.env.MAIL_PASSWORD
+        },
+        tls: {
+          rejectUnauthorized: false
+        }
+      })
 
-    const mailOptions = {
-      from: 'kaboyokelvin@gmail.com',
-      to: email,
-      subject: 'Password Reset Request',
-      text: `You are receiving this email because you (or someone else) have requested a password reset for your account.\n\n
+      const mailOptions = {
+        from: 'kaboyokelvin@gmail.com',
+        to: email,
+        subject: 'Password Reset Request',
+        text: `You are receiving this email because you (or someone else) have requested a password reset for your account.\n\n
       Please click on the following link, or paste this into your browser to complete the process:\n\n
       http://${process.env.CLIENT_URL}/reset-password/${token}   \n\n
       If you did not request this, please ignore this email and your password will remain unchanged.\n`
-    }
+      }
 
-    await transporter.sendMail(mailOptions)
-    res
-      .status(200)
-      .json({
-        message:
+      await transporter.sendMail(mailOptions)
+      res
+        .status(200)
+        .json({
+          message:
           'An email containing a password reset link has been sent to your email address. Please check your inbox and follow the instructions to reset your password.'
-      })
+        })
+    }
   } catch (error) {
     next(error)
   }
